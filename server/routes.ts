@@ -67,12 +67,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: 'Unauthorized' });
       }
       console.log('Looking for user with Firebase UID:', req.user.uid);
-      const user = await storage.getUserByFirebaseUid(req.user.uid);
+      let user = await storage.getUserByFirebaseUid(req.user.uid);
+      
+      // If user doesn't exist, create them from Firebase data
       if (!user) {
-        console.log('User not found in database for UID:', req.user.uid);
-        return res.status(404).json({ message: 'User not found' });
+        console.log('User not found, creating from Firebase data');
+        const userData = {
+          email: req.user.email || 'unknown@example.com',
+          name: req.user.name || req.user.email?.split('@')[0] || 'User',
+          firebaseUid: req.user.uid,
+        };
+        user = await storage.createUser(userData);
+        console.log('Created user from Firebase data:', user.email);
       }
-      console.log('Found user:', user.email);
+      
+      console.log('Found/created user:', user.email);
       res.json(user);
     } catch (error: any) {
       console.error('Error in auth verify:', error);
