@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { NavigationHeader } from "@/components/navigation-header";
-import { UserProfileSidebar } from "@/components/user-profile-sidebar";
+import { Layout } from "@/components/layout";
 import { PostCreator } from "@/components/post-creator";
 import { PostCard } from "@/components/post-card";
 import { SuggestedConnections } from "@/components/suggested-connections";
@@ -14,18 +13,10 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-light-grey">
-      <NavigationHeader />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Sidebar */}
-          <aside className="lg:col-span-3">
-            <UserProfileSidebar />
-          </aside>
-
-          {/* Main Feed */}
-          <section className="lg:col-span-6">
+    <Layout>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Feed */}
+        <section className="lg:col-span-2">
             <PostCreator />
             
             <div className="space-y-6">
@@ -57,15 +48,14 @@ export default function Home() {
                 </div>
               )}
             </div>
-          </section>
+        </section>
 
-          {/* Right Sidebar */}
-          <aside className="lg:col-span-3 space-y-6">
-            <SuggestedConnections />
-            <TrendingTopics />
-          </aside>
-        </div>
-      </main>
-    </div>
+        {/* Right Sidebar */}
+        <aside className="lg:col-span-1 space-y-6">
+          <SuggestedConnections />
+          <TrendingTopics />
+        </aside>
+      </div>
+    </Layout>
   );
 }

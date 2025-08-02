@@ -6,6 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { type User } from "@shared/schema";
 import { Link } from "wouter";
 
+import { Layout } from "@/components/layout";
+
 export function NetworkPage() {
   // For demo purposes, we'll show all users as potential connections
   const { data: users = [], isLoading } = useQuery<User[]>({
@@ -15,8 +17,9 @@ export function NetworkPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="animate-pulse space-y-4">
+      <Layout>
+        <div className="max-w-4xl">
+          <div className="animate-pulse space-y-4">
           {[...Array(6)].map((_, i) => (
             <Card key={i}>
               <CardContent className="p-6">
@@ -31,14 +34,16 @@ export function NetworkPage() {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <Card className="mb-6">
+    <Layout>
+      <div className="max-w-4xl">
+        <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Users className="w-5 h-5" />
@@ -103,7 +108,8 @@ export function NetworkPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }

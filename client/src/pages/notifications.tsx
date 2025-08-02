@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Bell, ThumbsUp, MessageCircle, UserPlus, Briefcase } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
+import { Layout } from "@/components/layout";
+
 export function NotificationsPage() {
   // Mock notification data for demo
   const notifications = [
@@ -68,8 +70,9 @@ export function NotificationsPage() {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <Card className="mb-6">
+    <Layout>
+      <div className="max-w-4xl">
+        <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -155,7 +158,8 @@ export function NotificationsPage() {
             </Card>
           ))
         )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }

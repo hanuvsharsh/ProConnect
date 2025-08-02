@@ -6,6 +6,8 @@ import { MessageCircle, Send, Search } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
+import { Layout } from "@/components/layout";
+
 export function MessagesPage() {
   const { user } = useAuth();
   const [messageText, setMessageText] = useState("");
@@ -75,8 +77,9 @@ export function MessagesPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[600px]">
+    <Layout>
+      <div className="max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[600px]">
         {/* Conversations List */}
         <Card className="md:col-span-1">
           <CardHeader>
@@ -199,7 +202,8 @@ export function MessagesPage() {
             </div>
           </div>
         </Card>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
