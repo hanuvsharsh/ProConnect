@@ -37,6 +37,8 @@ export class MemStorage implements IStorage {
   }
 
   async getUserByFirebaseUid(firebaseUid: string): Promise<User | undefined> {
+    console.log('Searching for Firebase UID:', firebaseUid);
+    console.log('All users in storage:', Array.from(this.users.values()).map(u => ({ id: u.id, email: u.email, firebaseUid: u.firebaseUid })));
     return Array.from(this.users.values()).find(
       (user) => user.firebaseUid === firebaseUid,
     );
