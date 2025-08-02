@@ -43,20 +43,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/register", verifyFirebaseToken, async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
-      console.log('Registering user with Firebase UID:', userData.firebaseUid);
       
       // Check if user already exists
       const existingUser = await storage.getUserByFirebaseUid(userData.firebaseUid);
       if (existingUser) {
-        console.log('User already exists, returning existing user');
         return res.json(existingUser);
       }
       
       const user = await storage.createUser(userData);
-      console.log('Created new user:', user.email, 'with UID:', user.firebaseUid);
       res.json(user);
     } catch (error: any) {
-      console.error('Error in registration:', error);
       res.status(400).json({ message: error.message });
     }
   });
@@ -66,22 +62,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!req.user) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
-      console.log('Looking for user with Firebase UID:', req.user.uid);
       let user = await storage.getUserByFirebaseUid(req.user.uid);
       
       // If user doesn't exist, create them from Firebase data
       if (!user) {
-        console.log('User not found, creating from Firebase data');
         const userData = {
           email: req.user.email || 'unknown@example.com',
           name: req.user.name || req.user.email?.split('@')[0] || 'User',
           firebaseUid: req.user.uid,
         };
         user = await storage.createUser(userData);
-        console.log('Created user from Firebase data:', user.email);
       }
-      
-      console.log('Found/created user:', user.email);
       res.json(user);
     } catch (error: any) {
       console.error('Error in auth verify:', error);
