@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Search, Home, Users, MessageCircle, Bell, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Search, Home, Users, MessageCircle, Bell, ChevronDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +12,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { type User } from "@shared/schema";
 
 export function NavigationHeader() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Search users query
+  const { data: searchResults = [] } = useQuery<User[]>({
+    queryKey: ['/api/search/users', searchQuery],
+    enabled: searchQuery.length > 2,
+  });
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -22,6 +44,17 @@ export function NavigationHeader() {
     } catch (error) {
       console.error("Error logging out:", error);
     }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setShowResults(value.length > 2);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setShowResults(false);
   };
 
   return (
@@ -36,18 +69,57 @@ export function NavigationHeader() {
           </div>
 
           {/* Search Bar */}
-          <div className="hidden md:block flex-1 max-w-md mx-8">
+          <div className="hidden md:block flex-1 max-w-md mx-8" ref={searchRef}>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 text-gray-400" />
               </div>
               <Input
                 type="text"
-                className="pl-10"
+                className="pl-10 pr-10"
                 placeholder="Search professionals..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
+                onFocus={() => searchQuery.length > 2 && setShowResults(true)}
               />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute inset-y-0 right-0 px-3"
+                  onClick={clearSearch}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+              
+              {/* Search Results */}
+              {showResults && searchResults.length > 0 && (
+                <Card className="absolute top-full left-0 right-0 mt-1 shadow-lg z-50">
+                  <CardContent className="p-2">
+                    {searchResults.slice(0, 5).map((result) => (
+                      <Link key={result.id} href={`/profile/${result.id}`}>
+                        <div 
+                          className="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded cursor-pointer"
+                          onClick={() => {
+                            setShowResults(false);
+                            setSearchQuery("");
+                          }}
+                        >
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src={result.profileImage || ""} alt={result.name} />
+                            <AvatarFallback>{result.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium text-sm">{result.name}</p>
+                            {result.title && <p className="text-xs text-gray-600">{result.title}</p>}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
 
@@ -59,18 +131,24 @@ export function NavigationHeader() {
                 <span className="text-xs mt-1">Home</span>
               </Button>
             </Link>
-            <Button variant="ghost" className="flex flex-col items-center p-2 h-auto">
-              <Users className="h-5 w-5" />
-              <span className="text-xs mt-1">Network</span>
-            </Button>
-            <Button variant="ghost" className="flex flex-col items-center p-2 h-auto">
-              <MessageCircle className="h-5 w-5" />
-              <span className="text-xs mt-1">Messages</span>
-            </Button>
-            <Button variant="ghost" className="flex flex-col items-center p-2 h-auto">
-              <Bell className="h-5 w-5" />
-              <span className="text-xs mt-1">Notifications</span>
-            </Button>
+            <Link href="/network">
+              <Button variant="ghost" className="flex flex-col items-center p-2 h-auto">
+                <Users className="h-5 w-5" />
+                <span className="text-xs mt-1">Network</span>
+              </Button>
+            </Link>
+            <Link href="/messages">
+              <Button variant="ghost" className="flex flex-col items-center p-2 h-auto">
+                <MessageCircle className="h-5 w-5" />
+                <span className="text-xs mt-1">Messages</span>
+              </Button>
+            </Link>
+            <Link href="/notifications">
+              <Button variant="ghost" className="flex flex-col items-center p-2 h-auto">
+                <Bell className="h-5 w-5" />
+                <span className="text-xs mt-1">Notifications</span>
+              </Button>
+            </Link>
           </nav>
 
           {/* User Menu */}

@@ -8,6 +8,9 @@ import NotFound from "@/pages/not-found";
 import Login from "@/pages/login";
 import Home from "@/pages/home";
 import Profile from "@/pages/profile";
+import { NetworkPage } from "@/pages/network";
+import { MessagesPage } from "@/pages/messages";
+import { NotificationsPage } from "@/pages/notifications";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -56,6 +59,21 @@ function Router() {
       <Route path="/">
         <ProtectedRoute>
           <Home />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/network">
+        <ProtectedRoute>
+          <NetworkPage />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/messages">
+        <ProtectedRoute>
+          <MessagesPage />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/notifications">
+        <ProtectedRoute>
+          <NotificationsPage />
         </ProtectedRoute>
       </Route>
       <Route path="/profile/:id">

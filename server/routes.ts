@@ -1,7 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertPostSchema } from "@shared/schema";
+import { insertUserSchema, insertPostSchema, insertLikeSchema, insertCommentSchema } from "@shared/schema";
 import admin from "firebase-admin";
 
 // Extend Express Request type to include user
@@ -126,9 +126,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Post routes
-  app.get("/api/posts", async (req, res) => {
+  // Search route
+  app.get("/api/search/users", async (req, res) => {
     try {
-      const posts = await storage.getAllPosts();
+      const query = req.query.q as string;
+      if (!query) {
+        return res.status(400).json({ message: 'Query parameter required' });
+      }
+      const users = await storage.searchUsers(query);
+      res.json(users);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/posts", verifyFirebaseToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      const currentUser = await storage.getUserByFirebaseUid(req.user.uid);
+      const posts = await storage.getAllPosts(currentUser?.id);
       res.json(posts);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -187,6 +205,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: 'Post deleted successfully' });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Like routes
+  app.post("/api/posts/:id/like", verifyFirebaseToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      const currentUser = await storage.getUserByFirebaseUid(req.user.uid);
+      if (!currentUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      const isLiked = await storage.isPostLikedByUser(req.params.id, currentUser.id);
+      if (isLiked) {
+        await storage.unlikePost(req.params.id, currentUser.id);
+        res.json({ liked: false });
+      } else {
+        await storage.likePost(req.params.id, currentUser.id);
+        res.json({ liked: true });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Comment routes
+  app.get("/api/posts/:id/comments", async (req, res) => {
+    try {
+      const comments = await storage.getPostComments(req.params.id);
+      res.json(comments);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/posts/:id/comments", verifyFirebaseToken, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      const currentUser = await storage.getUserByFirebaseUid(req.user.uid);
+      if (!currentUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      const commentData = insertCommentSchema.parse({
+        ...req.body,
+        postId: req.params.id,
+        authorId: currentUser.id,
+      });
+      
+      const comment = await storage.createComment(commentData);
+      res.json(comment);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
     }
   });
 
