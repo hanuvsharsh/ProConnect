@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Edit, Image, Hash } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -75,6 +75,9 @@ export function PostCreator() {
               <DialogContent className="sm:max-w-[525px]">
                 <DialogHeader>
                   <DialogTitle>Create a post</DialogTitle>
+                  <DialogDescription>
+                    Share your thoughts with your professional network
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-start space-x-3 mb-4">
                   <Avatar className="w-12 h-12">
