@@ -2,7 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertPostSchema, insertLikeSchema, insertCommentSchema } from "@shared/schema";
-import { admin } from "/Users/harshvardhansingh/Downloads/ConnectSphere/server/firebase-admin.ts";
+import { admin } from "./firebase-admin";
 
 import express from "express";
 
