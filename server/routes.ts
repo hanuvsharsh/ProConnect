@@ -2,7 +2,37 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertPostSchema, insertLikeSchema, insertCommentSchema } from "@shared/schema";
-import admin from "firebase-admin";
+import { admin } from "/Users/harshvardhansingh/Downloads/ConnectSphere/server/firebase-admin.ts";
+
+import express from "express";
+
+const router = express.Router();
+
+router.get("/verify", async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "Missing or invalid token" });
+    }
+
+    const token = authHeader.split("Bearer ")[1];
+    const decoded = await admin.auth().verifyIdToken(token);
+
+    const user = {
+      email: decoded.email,
+      name: decoded.name || "Anonymous",
+      firebaseUid: decoded.uid,
+    };
+
+    return res.json(user);
+  } catch (err) {
+    console.error("Token verification error:", err);
+    return res.status(403).json({ error: "Invalid token" });
+  }
+});
+
+export default router;
+
 
 // Extend Express Request type to include user
 declare global {

@@ -10,9 +10,37 @@ import { useLocation } from "wouter";
 
 export default function Login() {
   const [, setLocation] = useLocation();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, setUser } = useAuth(); // 👈 add setUser
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    try {
+      const demoUser = {
+        id: "demo-id",
+        name: "Demo User",
+        email: "demo@connectsphere.com",
+        title: "Explorer",
+        bio: "Just exploring things.",
+        location: "Internet",
+        profileImage: "https://i.pravatar.cc/150?u=demo",
+        firebaseUid: "demo-firebase-uid",
+        createdAt: new Date(),
+      };
+
+      setUser(demoUser); // 👈 bypass signIn
+      setLocation("/");
+    } catch (error: any) {
+      toast({
+        title: "Demo login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -79,7 +107,17 @@ export default function Login() {
               </TabsList>
               
               <TabsContent value="login">
-                <form onSubmit={handleLogin} className="space-y-4">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-full"
+                  onClick={handleDemoLogin}
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Try Demo Login"}
+                </Button>
+
+                <form onSubmit={handleLogin} className="space-y-4 mt-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input

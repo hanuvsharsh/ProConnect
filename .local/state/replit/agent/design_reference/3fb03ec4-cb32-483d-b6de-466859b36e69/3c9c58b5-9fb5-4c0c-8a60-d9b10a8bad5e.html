@@ -1,0 +1,517 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProConnect - Professional Networking Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'linkedin-blue': '#0077B5',
+                        'light-grey': '#F3F2EF',
+                        'teal-accent': '#57C5B6',
+                        'success-green': '#057642'
+                    },
+                    fontFamily: {
+                        'professional': ['Inter', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light-grey font-professional">
+    
+    <!-- @COMPONENT: NavigationHeader [isLoggedIn, user] -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-linkedin-blue">ProConnect</h1>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="hidden md:block flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-linkedin-blue focus:border-linkedin-blue" placeholder="Search professionals..." data-mock="true">
+                    </div>
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-linkedin-blue px-3 py-2 rounded-md text-sm font-medium flex flex-col items-center" data-event="click:navigateToHome">
+                        <i class="fas fa-home text-lg"></i>
+                        <span class="text-xs mt-1">Home</span>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-linkedin-blue px-3 py-2 rounded-md text-sm font-medium flex flex-col items-center" data-event="click:navigateToNetwork">
+                        <i class="fas fa-user-friends text-lg"></i>
+                        <span class="text-xs mt-1">Network</span>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-linkedin-blue px-3 py-2 rounded-md text-sm font-medium flex flex-col items-center" data-event="click:navigateToMessages">
+                        <i class="fas fa-comment-dots text-lg"></i>
+                        <span class="text-xs mt-1">Messages</span>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-linkedin-blue px-3 py-2 rounded-md text-sm font-medium flex flex-col items-center" data-event="click:navigateToNotifications">
+                        <i class="fas fa-bell text-lg"></i>
+                        <span class="text-xs mt-1">Notifications</span>
+                    </a>
+                </nav>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="flex items-center space-x-2 text-gray-600 hover:text-linkedin-blue" data-event="click:toggleUserMenu">
+                            <!-- Professional headshot placeholder -->
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" alt="User profile" class="w-8 h-8 rounded-full object-cover" data-bind="user.profileImage">
+                            <span class="hidden md:block text-sm font-medium" data-bind="user.name">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: NavigationHeader -->
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- @COMPONENT: UserProfileSidebar [user, connectionCount] -->
+            <aside class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <!-- Cover Photo -->
+                    <!-- A professional office workspace with clean desk and laptop -->
+                    <div class="h-20 bg-gradient-to-r from-linkedin-blue to-teal-accent"></div>
+                    
+                    <!-- Profile Info -->
+                    <div class="px-4 pb-4 -mt-10 relative">
+                        <!-- Professional headshot of a business professional -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Profile picture" class="w-20 h-20 rounded-full border-4 border-white object-cover" data-bind="user.profileImage">
+                        <h3 class="mt-2 text-lg font-semibold text-gray-900" data-bind="user.name">John Doe</h3>
+                        <p class="text-sm text-gray-600" data-bind="user.title">Senior Software Engineer at TechCorp</p>
+                        <p class="text-xs text-gray-500 mt-1" data-bind="user.location">San Francisco, CA</p>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="border-t border-gray-200 px-4 py-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Connections</span>
+                            <span class="font-semibold text-linkedin-blue" data-bind="user.connectionCount">342</span>
+                        </div>
+                        <div class="flex justify-between text-sm mt-1">
+                            <span class="text-gray-600">Posts</span>
+                            <span class="font-semibold text-linkedin-blue" data-bind="user.postCount">28</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="border-t border-gray-200 px-4 py-3">
+                        <button class="w-full text-left text-sm text-gray-600 hover:text-linkedin-blue py-1" data-event="click:viewProfile">
+                            <i class="fas fa-user mr-2"></i>View Profile
+                        </button>
+                        <button class="w-full text-left text-sm text-gray-600 hover:text-linkedin-blue py-1" data-event="click:editProfile">
+                            <i class="fas fa-edit mr-2"></i>Edit Profile
+                        </button>
+                    </div>
+                </div>
+            </aside>
+            <!-- @END_COMPONENT: UserProfileSidebar -->
+
+            <!-- @COMPONENT: MainFeed [posts, user] -->
+            <section class="lg:col-span-6">
+                
+                <!-- @COMPONENT: PostCreator [user] -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+                    <div class="flex items-start space-x-3">
+                        <!-- Professional headshot of a business professional -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Your profile" class="w-12 h-12 rounded-full object-cover" data-bind="user.profileImage">
+                        <div class="flex-1">
+                            <button class="w-full text-left p-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 focus:ring-2 focus:ring-linkedin-blue focus:border-linkedin-blue" data-event="click:openPostCreator" data-implementation="Should open post creation modal">
+                                What's on your mind, <span data-bind="user.firstName">John</span>?
+                            </button>
+                            <div class="flex items-center justify-between mt-3">
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md" data-event="click:createTextPost">
+                                    <i class="fas fa-edit text-linkedin-blue"></i>
+                                    <span class="text-sm font-medium">Write article</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md" data-event="click:uploadMedia">
+                                    <i class="fas fa-image text-success-green"></i>
+                                    <span class="text-sm font-medium">Add photo</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md" data-event="click:shareUpdate">
+                                    <i class="fas fa-calendar text-teal-accent"></i>
+                                    <span class="text-sm font-medium">Event</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: PostCreator -->
+
+                <!-- @COMPONENT: PostFeed [posts] -->
+                <div class="space-y-6">
+                    
+                    <!-- @MAP: posts.map(post => ( -->
+                    <!-- @COMPONENT: PostCard [post, user] -->
+                    <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-mock="true">
+                        <div class="p-4">
+                            <!-- Post Header -->
+                            <div class="flex items-start space-x-3">
+                                <!-- Professional headshot of a marketing professional -->
+                                <img src="https://pixabay.com/get/g6e424367bbc8d606f215e1eb343b02b19bea6906079be543e4dba9cd5f862079dd98effc7893451659ba9613d58c3889688f30e6b7df4675fac9826df20fe536_1280.jpg" alt="Sarah Chen" class="w-12 h-12 rounded-full object-cover" data-bind="post.author.profileImage">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-900" data-bind="post.author.name">Sarah Chen</h4>
+                                    <p class="text-sm text-gray-600" data-bind="post.author.title">Marketing Director at InnovateCorp</p>
+                                    <p class="text-xs text-gray-500" data-bind="post.timestamp">2 hours ago</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600" data-event="click:showPostMenu">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Post Content -->
+                            <div class="mt-4">
+                                <p class="text-gray-900 leading-relaxed" data-bind="post.content" data-mock="true">
+                                    Excited to share some insights from our latest marketing campaign! We achieved a 150% increase in engagement by focusing on authentic storytelling and community building. The key was really understanding our audience's needs and creating content that genuinely helps them solve problems.
+                                    
+                                    What strategies have worked best for your marketing efforts? I'd love to hear your thoughts! 
+                                    
+                                    #Marketing #DigitalStrategy #CommunityBuilding
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Post Actions -->
+                        <div class="border-t border-gray-200 px-4 py-3">
+                            <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
+                                <span data-bind="post.likeCount">24 likes</span>
+                                <span data-bind="post.commentCount">8 comments</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:toggleLike">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span>Like</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:toggleComments">
+                                    <i class="far fa-comment"></i>
+                                    <span>Comment</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:sharePost">
+                                    <i class="fas fa-share"></i>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- @END_COMPONENT: PostCard -->
+
+                    <!-- @COMPONENT: PostCard [post, user] -->
+                    <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-mock="true">
+                        <div class="p-4">
+                            <div class="flex items-start space-x-3">
+                                <!-- Professional headshot of a tech professional -->
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" alt="Mike Johnson" class="w-12 h-12 rounded-full object-cover" data-bind="post.author.profileImage">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-900" data-bind="post.author.name">Mike Johnson</h4>
+                                    <p class="text-sm text-gray-600" data-bind="post.author.title">Full Stack Developer at StartupXYZ</p>
+                                    <p class="text-xs text-gray-500" data-bind="post.timestamp">5 hours ago</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600" data-event="click:showPostMenu">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <p class="text-gray-900 leading-relaxed" data-bind="post.content" data-mock="true">
+                                    Just completed a major refactoring of our authentication system using React and Firebase. The new implementation reduced load times by 40% and improved security with better error handling. 
+                                    
+                                    Key lessons learned:
+                                    1. Always validate user input on both client and server
+                                    2. Implement proper error boundaries
+                                    3. Use TypeScript for better type safety
+                                    
+                                    Happy to share more details if anyone's interested! 💻
+                                    
+                                    #WebDevelopment #React #Firebase #Authentication
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 px-4 py-3">
+                            <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
+                                <span data-bind="post.likeCount">67 likes</span>
+                                <span data-bind="post.commentCount">15 comments</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:toggleLike">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span>Like</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:toggleComments">
+                                    <i class="far fa-comment"></i>
+                                    <span>Comment</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:sharePost">
+                                    <i class="fas fa-share"></i>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- @END_COMPONENT: PostCard -->
+
+                    <!-- @COMPONENT: PostCard [post, user] -->
+                    <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-mock="true">
+                        <div class="p-4">
+                            <div class="flex items-start space-x-3">
+                                <!-- Professional headshot of a business consultant -->
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150" alt="Emily Rodriguez" class="w-12 h-12 rounded-full object-cover" data-bind="post.author.profileImage">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-900" data-bind="post.author.name">Emily Rodriguez</h4>
+                                    <p class="text-sm text-gray-600" data-bind="post.author.title">Business Strategy Consultant</p>
+                                    <p class="text-xs text-gray-500" data-bind="post.timestamp">1 day ago</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600" data-event="click:showPostMenu">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <p class="text-gray-900 leading-relaxed" data-bind="post.content" data-mock="true">
+                                    Reflecting on an incredible week at the Global Business Summit. Three key takeaways that every leader should consider:
+                                    
+                                    🎯 Customer-centricity isn't just a buzzword - it's the foundation of sustainable growth
+                                    📊 Data-driven decision making is table stakes in 2024
+                                    🤝 Building authentic relationships still trumps everything else
+                                    
+                                    The most successful companies I've worked with master all three. What would you add to this list?
+                                    
+                                    #Leadership #BusinessStrategy #CustomerExperience #DataDriven
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 px-4 py-3">
+                            <div class="flex items-center justify-between text-sm text-gray-500 mb-3">
+                                <span data-bind="post.likeCount">89 likes</span>
+                                <span data-bind="post.commentCount">23 comments</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:toggleLike">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span>Like</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:toggleComments">
+                                    <i class="far fa-comment"></i>
+                                    <span>Comment</span>
+                                </button>
+                                <button class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md flex-1 justify-center" data-event="click:sharePost">
+                                    <i class="fas fa-share"></i>
+                                    <span>Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- @END_COMPONENT: PostCard -->
+                    <!-- @END_MAP )) -->
+                    
+                </div>
+                <!-- @END_COMPONENT: PostFeed -->
+                
+            </section>
+            <!-- @END_COMPONENT: MainFeed -->
+
+            <!-- @COMPONENT: RightSidebar [suggestedConnections, trendingTopics] -->
+            <aside class="lg:col-span-3 space-y-6">
+                
+                <!-- @COMPONENT: SuggestedConnections [connections] -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="px-4 py-3 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900">People you may know</h3>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        <!-- @MAP: suggestedConnections.map(connection => ( -->
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <!-- Professional headshot of a finance professional -->
+                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="David Park" class="w-12 h-12 rounded-full object-cover" data-bind="connection.profileImage">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-semibold text-gray-900 truncate" data-bind="connection.name">David Park</h4>
+                                <p class="text-xs text-gray-600 truncate" data-bind="connection.title">Financial Analyst at Goldman Sachs</p>
+                                <p class="text-xs text-gray-500" data-bind="connection.mutualConnections">12 mutual connections</p>
+                                <button class="mt-2 px-3 py-1 bg-linkedin-blue text-white text-xs rounded-full hover:bg-blue-700 focus:ring-2 focus:ring-linkedin-blue focus:ring-offset-2" data-event="click:sendConnectionRequest">
+                                    Connect
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <!-- Professional headshot of a design professional -->
+                            <img src="https://images.unsplash.com/photo-1587614387466-0a72ca909e16?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Lisa Wang" class="w-12 h-12 rounded-full object-cover" data-bind="connection.profileImage">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-semibold text-gray-900 truncate" data-bind="connection.name">Lisa Wang</h4>
+                                <p class="text-xs text-gray-600 truncate" data-bind="connection.title">UX Designer at Adobe</p>
+                                <p class="text-xs text-gray-500" data-bind="connection.mutualConnections">8 mutual connections</p>
+                                <button class="mt-2 px-3 py-1 bg-linkedin-blue text-white text-xs rounded-full hover:bg-blue-700 focus:ring-2 focus:ring-linkedin-blue focus:ring-offset-2" data-event="click:sendConnectionRequest">
+                                    Connect
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <!-- Professional headshot of a sales professional -->
+                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Alex Thompson" class="w-12 h-12 rounded-full object-cover" data-bind="connection.profileImage">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-semibold text-gray-900 truncate" data-bind="connection.name">Alex Thompson</h4>
+                                <p class="text-xs text-gray-600 truncate" data-bind="connection.title">Sales Director at Salesforce</p>
+                                <p class="text-xs text-gray-500" data-bind="connection.mutualConnections">15 mutual connections</p>
+                                <button class="mt-2 px-3 py-1 bg-linkedin-blue text-white text-xs rounded-full hover:bg-blue-700 focus:ring-2 focus:ring-linkedin-blue focus:ring-offset-2" data-event="click:sendConnectionRequest">
+                                    Connect
+                                </button>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                    <div class="px-4 py-3 border-t border-gray-200">
+                        <button class="text-sm text-linkedin-blue hover:underline" data-event="click:viewAllSuggestions">
+                            View all recommendations
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: SuggestedConnections -->
+
+                <!-- @COMPONENT: TrendingTopics [topics] -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="px-4 py-3 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900">Trending in your network</h3>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <!-- @MAP: trendingTopics.map(topic => ( -->
+                        <div class="cursor-pointer hover:bg-gray-50 p-2 rounded-md" data-mock="true" data-event="click:viewTopic">
+                            <h4 class="text-sm font-semibold text-gray-900" data-bind="topic.title">#RemoteWork</h4>
+                            <p class="text-xs text-gray-600" data-bind="topic.posts">1,234 posts this week</p>
+                        </div>
+
+                        <div class="cursor-pointer hover:bg-gray-50 p-2 rounded-md" data-mock="true" data-event="click:viewTopic">
+                            <h4 class="text-sm font-semibold text-gray-900" data-bind="topic.title">#ArtificialIntelligence</h4>
+                            <p class="text-xs text-gray-600" data-bind="topic.posts">987 posts this week</p>
+                        </div>
+
+                        <div class="cursor-pointer hover:bg-gray-50 p-2 rounded-md" data-mock="true" data-event="click:viewTopic">
+                            <h4 class="text-sm font-semibold text-gray-900" data-bind="topic.title">#DigitalTransformation</h4>
+                            <p class="text-xs text-gray-600" data-bind="topic.posts">756 posts this week</p>
+                        </div>
+
+                        <div class="cursor-pointer hover:bg-gray-50 p-2 rounded-md" data-mock="true" data-event="click:viewTopic">
+                            <h4 class="text-sm font-semibold text-gray-900" data-bind="topic.title">#Sustainability</h4>
+                            <p class="text-xs text-gray-600" data-bind="topic.posts">623 posts this week</p>
+                        </div>
+
+                        <div class="cursor-pointer hover:bg-gray-50 p-2 rounded-md" data-mock="true" data-event="click:viewTopic">
+                            <h4 class="text-sm font-semibold text-gray-900" data-bind="topic.title">#Leadership</h4>
+                            <p class="text-xs text-gray-600" data-bind="topic.posts">589 posts this week</p>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: TrendingTopics -->
+
+            </aside>
+            <!-- @END_COMPONENT: RightSidebar -->
+
+        </div>
+    </main>
+
+    <!-- @COMPONENT: PostCreationModal [isOpen, user] -->
+    <!-- @STATE: isPostModalOpen:boolean = false -->
+    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden" id="postModal" data-bind="isPostModalOpen">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Create a post</h3>
+                <button class="text-gray-400 hover:text-gray-600" data-event="click:closePostModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="flex items-start space-x-3 mb-4">
+                <!-- Professional headshot of a business professional -->
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Your profile" class="w-12 h-12 rounded-full object-cover" data-bind="user.profileImage">
+                <div>
+                    <h4 class="font-semibold text-gray-900" data-bind="user.name">John Doe</h4>
+                    <p class="text-sm text-gray-600" data-bind="user.title">Senior Software Engineer</p>
+                </div>
+            </div>
+            
+            <textarea class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-linkedin-blue focus:border-linkedin-blue resize-none" rows="6" placeholder="What do you want to talk about?" data-implementation="Should bind to post content state"></textarea>
+            
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-linkedin-blue" data-event="click:addEmoji">
+                        <i class="far fa-smile text-lg"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-linkedin-blue" data-event="click:addImage">
+                        <i class="fas fa-image text-lg"></i>
+                    </button>
+                    <button class="text-gray-600 hover:text-linkedin-blue" data-event="click:addHashtag">
+                        <i class="fas fa-hashtag text-lg"></i>
+                    </button>
+                </div>
+                <button class="px-6 py-2 bg-linkedin-blue text-white rounded-full hover:bg-blue-700 focus:ring-2 focus:ring-linkedin-blue focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed" data-event="click:publishPost" data-implementation="Should validate content and create new post">
+                    Post
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: PostCreationModal -->
+
+    <script>
+        (function() {
+            // TODO: Implement business logic, API calls, or state management
+            
+            // Modal functionality for post creation
+            const postModal = document.getElementById('postModal');
+            const openModalButtons = document.querySelectorAll('[data-event*="openPostCreator"]');
+            const closeModalButtons = document.querySelectorAll('[data-event*="closePostModal"]');
+            
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    postModal.classList.remove('hidden');
+                });
+            });
+            
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    postModal.classList.add('hidden');
+                });
+            });
+            
+            // Close modal when clicking outside
+            postModal.addEventListener('click', (e) => {
+                if (e.target === postModal) {
+                    postModal.classList.add('hidden');
+                }
+            });
+            
+            // Placeholder for other interactions
+            document.addEventListener('click', (e) => {
+                const eventAttribute = e.target.getAttribute('data-event') || e.target.closest('[data-event]')?.getAttribute('data-event');
+                if (eventAttribute && eventAttribute !== 'click:openPostCreator' && eventAttribute !== 'click:closePostModal') {
+                    console.log('Event triggered:', eventAttribute);
+                    // TODO: Implement specific event handlers
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>

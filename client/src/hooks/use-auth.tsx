@@ -16,6 +16,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
+  setUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -30,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setFirebaseUser(firebaseUser);
       
       if (firebaseUser) {
+        
         try {
           const token = await firebaseUser.getIdToken();
           const response = await fetch("/api/auth/verify", {
@@ -45,6 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
+          
       } else {
         setUser(null);
       }
@@ -89,6 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signIn,
       signUp,
       logout,
+      setUser,
     }}>
       {children}
     </AuthContext.Provider>
