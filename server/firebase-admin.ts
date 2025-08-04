@@ -1,6 +1,6 @@
 // server/lib/firebase-admin.ts
 import admin from "firebase-admin";
-import serviceAccount from "/Users/harshvardhansingh/Downloads/ConnectSphere/server/config/serviceAccountKey.json";
+import serviceAccount from "./config/serviceAccountKey.json";
 
 if (!admin.apps.length) {
   admin.initializeApp({
